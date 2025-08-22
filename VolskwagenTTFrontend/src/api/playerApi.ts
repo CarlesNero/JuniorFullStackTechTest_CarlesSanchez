@@ -45,13 +45,16 @@ export const loginPlayer = async (loginData: LoginPlayerDTO): Promise<Player | A
 /* Get a player by id */
 
 export const getPlayer = async (playerId: number): Promise<Player> => {
-    const res = await fetch(`${BASE_URL}/player/${playerId}`)
+    const res = await fetch(`${BASE_URL}/${playerId}`)
     return res.json()
 }
 
 /* Get all players */
 
 export const getAllPlayers = async() : Promise<Player[]> =>{
-    const res = await fetch(`${BASE_URL}/player`)
+    const res = await fetch(`${BASE_URL}`)
     return res.json()
 }
+
+/* Get all user matches */
+

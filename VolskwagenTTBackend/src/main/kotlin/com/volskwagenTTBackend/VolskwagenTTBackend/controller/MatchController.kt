@@ -60,4 +60,11 @@ class MatchController(private val matchService: MatchService) {
         return ResponseEntity.ok(response)
     }
 
+
+    @GetMapping("/player/{playerId}/matches")
+    fun getMatchesByPlayer(@PathVariable playerId: Long): ResponseEntity<List<MatchEntity>> {
+        val matches = matchService.getMatchesByPlayer(playerId)
+        return ResponseEntity.ok(matches)
+    }
+
 }

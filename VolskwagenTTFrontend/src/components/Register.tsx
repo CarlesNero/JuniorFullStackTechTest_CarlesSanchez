@@ -3,8 +3,11 @@ import { toast } from "react-toastify"
 import { type ApiError, type NewPlayer } from "../interfaces/player"
 import { registerPlayer } from "../api/playerApi"
 
+type Props = {
+    onSwitchToLogin: () => void;
+}
 
-const Register = () => {
+const Register = ({ onSwitchToLogin }: Props) => {
     const [email, setEmail] = useState("")
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
@@ -24,6 +27,7 @@ const Register = () => {
                 toast.error(response.error)
             } else {
                 toast.success("User registered successfully!")
+                onSwitchToLogin()
                 console.log("Registered user:", response)
                 setEmail("")
                 setUsername("")

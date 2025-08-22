@@ -11,6 +11,7 @@ export interface NewPlayer {
 }
 
 export interface LoginPlayerDTO {
+  id?: number;
   username: string;
   password: string;
 }

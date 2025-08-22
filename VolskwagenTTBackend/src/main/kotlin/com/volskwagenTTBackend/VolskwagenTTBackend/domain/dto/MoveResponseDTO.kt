@@ -11,5 +11,5 @@ data class MoveResponseDTO(
 data class SquareResponseDTO(
     val x: Int,
     val y: Int,
-    val squareValue: String?
+    val square_value: String?
 )

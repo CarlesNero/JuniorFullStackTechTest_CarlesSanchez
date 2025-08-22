@@ -26,8 +26,8 @@ const LoginPage = () => {
         toast.error(response.error); // Mostrar mensaje de error del backend
       } else {
         toast.success("Login successful!");
-        loginUser(response); // Guardar usuario en contexto y localStorage
-        navigate("/home"); // Redirigir a Home
+        loginUser(response); // Save payer on contexto and localStorage
+        navigate("/home");
       }
     } catch (err) {
       console.error(err);

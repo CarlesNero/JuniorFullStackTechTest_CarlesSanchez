@@ -196,7 +196,7 @@ class MatchService(
             SquareResponseDTO(
                 x = square.x,
                 y = square.y,
-                squareValue = square.square_value
+                square_value = square.square_value
             )
         }
 
@@ -215,4 +215,11 @@ class MatchService(
     // Get a match of the db by Id
     fun getMatchById(id: Long): MatchEntity =
         matchRepository.findById(id).orElseThrow { RuntimeException("Match not found") }
+
+    // Get all matches by player Id
+
+    fun getMatchesByPlayer(playerId: Long): List<MatchEntity> {
+        return matchRepository.findByPlayerId(playerId)
+
+    }
 }

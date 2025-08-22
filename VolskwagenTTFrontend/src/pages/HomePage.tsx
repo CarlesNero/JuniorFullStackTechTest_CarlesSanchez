@@ -1,8 +1,16 @@
-type Props = {}
+import Board from "../components/board/Board"
+import Header from "../components/Header"
 
-const HomePage = (props: Props) => {
+
+
+const HomePage = () => {
   return (
-    <div>Home</div>
+    <div className="bg-gray-300 h-dvh">
+      <Header/>
+      <main className="max-w-5xl m-auto p-5">
+        <Board/>
+      </main>
+    </div>
   )
 }
 
