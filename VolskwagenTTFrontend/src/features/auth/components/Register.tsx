@@ -1,7 +1,8 @@
 import { useState, type FormEvent } from "react"
 import { toast } from "react-toastify"
-import { type ApiError, type NewPlayer } from "../interfaces/player"
-import { registerPlayer } from "../api/playerApi"
+import { ApiError, NewPlayer } from "../interfaces/player";
+import { registerPlayer } from "../services/playerApi";
+
 
 type Props = {
     onSwitchToLogin: () => void;

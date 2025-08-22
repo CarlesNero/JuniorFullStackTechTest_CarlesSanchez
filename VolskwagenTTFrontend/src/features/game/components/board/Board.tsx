@@ -1,9 +1,9 @@
 // components/board/Board.tsx
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../../auth/context/AuthContext";
 import { useMatch } from "../../hooks/useMatch";
 import ModalEndGame from "../modalEndGame";
 import Square from "./square/Square";
-import NewMatchBtn from "./NewMatchBtn";
+import NewMatchBtn from "./newMatchBtn/NewMatchBtn";
 
 const Board = () => {
   const { player } = useAuth();

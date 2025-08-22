@@ -2,9 +2,8 @@ import { useState } from "react"
 import Login from "../components/Login"
 import Register from "../components/Register"
 
-type Props = {}
 
-const AuthPage = (props: Props) => {
+const AuthPage = () => {
   const [activeRoute, setActiveRoute] = useState<"login" | "register">("login")
 
   return (

@@ -1,6 +1,6 @@
 // hooks/useMatch.ts
 import { useState, useEffect, useCallback } from "react";
-import { createMatch, getMatchStatus, makeMove, getAllUserMatches } from "../api/matchApi";
+import { createMatch, getMatchStatus, makeMove, getAllUserMatches } from "../services/matchApi";
 import type { MatchStatusDTO, MoveRequestDTO } from "../interfaces/match";
 
 export const useMatch = (playerId: number) => {

@@ -1,5 +1,6 @@
 import Board from "../components/board/Board"
-import Header from "../components/Header"
+import Header from "../../../shared/components/Header"
+
 
 
 

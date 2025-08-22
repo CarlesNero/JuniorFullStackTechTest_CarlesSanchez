@@ -1,9 +1,6 @@
-import { AuthContext, useAuth } from "../context/AuthContext";
+import { useAuth } from "../../features/auth/context/AuthContext";
 
-type Props = {};
-
-
-const Header = (props: Props) => {
+const Header = () => {
     const { player } = useAuth();
     const { logout } = useAuth();
 

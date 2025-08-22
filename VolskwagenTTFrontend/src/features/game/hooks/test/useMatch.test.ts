@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach, vi, type MockedFunction } from 'vitest'
 import { renderHook, waitFor, act } from '@testing-library/react'
 import { useMatch } from '../useMatch'
-import { createMatch, getMatchStatus, makeMove, getAllUserMatches } from '../../api/matchApi'
+import { createMatch, getMatchStatus, makeMove, getAllUserMatches } from '../../services/matchApi'
 import type { MatchStatusDTO, MoveRequestDTO, Match } from '../../interfaces/match'
-import type { Player } from '../../interfaces/player'
+import type { Player } from '../../../auth/interfaces/player'
 import type { Square, SquareValue } from '../../interfaces/square'
 
 

@@ -1,4 +1,4 @@
-import type { Player } from "./player"
+import type { Player } from "../../auth/interfaces/player"
 import type { Square, SquareDTO, SquareResponseDTO } from "./square"
 
 export interface Match {

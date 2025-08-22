@@ -1,9 +1,12 @@
 import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+
 import type { ApiError, LoginPlayerDTO, Player } from "../interfaces/player";
-import { loginPlayer } from "../api/playerApi";
+
+import { loginPlayer } from "../services/playerApi";
+
 import { toast } from "react-toastify";
+import { useAuth } from "../context/AuthContext";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");

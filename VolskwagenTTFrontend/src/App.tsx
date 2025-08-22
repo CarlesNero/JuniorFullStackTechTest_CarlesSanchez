@@ -1,9 +1,9 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
-import Auth from './pages/AuthPage'
-import ProtectedRoute from './context/ProtectedRoute'
-import HomePage from './pages/HomePage'
-import { AuthProvider } from './context/AuthContext'
+import Auth from './features/auth/pages/AuthPage'
+import ProtectedRoute from './features/auth/context/ProtectedRoute'
+import HomePage from './features/game/pages/HomePage'
+import { AuthProvider } from './features/auth/context/AuthContext'
 
 function App() {
   return (
