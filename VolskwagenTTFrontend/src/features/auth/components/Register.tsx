@@ -47,8 +47,8 @@ const Register = ({ onSwitchToLogin }: Props) => {
     }
 
     return (
-        <main>
-            <div className="bg-white shadow rounded-lg p-5 gap-5 flex flex-col w-[375px] mx-auto">
+        <main className="w-full max-w-[375px]">
+            <div className="bg-white shadow rounded-lg p-5 gap-5 flex flex-col w-full min-w-[328px]  md:w-[375px] mx-auto">
                 <div className="flex flex-col gap-2 items-center">
                     <h1 className="text-xl font-bold text-center">Register</h1>
                     <p className="font-light text-gray-500">Register and start playing</p>

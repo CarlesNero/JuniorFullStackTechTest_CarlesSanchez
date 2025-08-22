@@ -16,14 +16,16 @@ function App() {
           <Route path="/auth" element={<Auth />} />
 
 
-          <Route
+          <Route 
             path="/home"
             element={
               <ProtectedRoute>
+                
                 <HomePage />
+         
               </ProtectedRoute>
             }
-          />
+            />
         </Routes>
       </BrowserRouter>
 

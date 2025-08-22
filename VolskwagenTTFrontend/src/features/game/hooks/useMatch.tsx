@@ -1,14 +1,15 @@
 // hooks/useMatch.ts
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useContext } from "react";
 import { createMatch, getMatchStatus, makeMove, getAllUserMatches } from "../services/matchApi";
 import type { MatchStatusDTO, MoveRequestDTO } from "../interfaces/match";
+import { MatchContext } from "../context/matchContext";
 
 export const useMatch = (playerId: number) => {
   const [match, setMatch] = useState<MatchStatusDTO | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
+  const { matches, setMatches } = useContext(MatchContext)!;
 
   const getMatch = useCallback(async (matchId: number) => {
     try {
@@ -21,12 +22,16 @@ export const useMatch = (playerId: number) => {
   }, []);
 
 
+
+
   const fetchLastMatch = useCallback(async () => {
     setIsLoading(true);
     setError(null);
-    
+
     try {
       const data = await getAllUserMatches(playerId);
+      setMatches(data);
+
 
       if (data && data.length > 0) {
         const lastMatch = data[data.length - 1];
@@ -54,11 +59,13 @@ export const useMatch = (playerId: number) => {
   const createNewMatch = useCallback(async () => {
     setIsLoading(true);
     setError(null);
-    
+
     try {
       const data = await createMatch(playerId);
       const newMatch = await getMatch(data.matchId);
       setMatch(newMatch);
+      const matchesData = await getAllUserMatches(playerId);
+      setMatches(matchesData);
       setShowModal(false);
       return data;
     } catch (error) {
@@ -72,10 +79,10 @@ export const useMatch = (playerId: number) => {
 
   const makeMoveOnClick = useCallback(async (x: number, y: number) => {
     if (!match) return;
-    
+
     setIsLoading(true);
     setError(null);
-    
+
     try {
       const moveRequestDTO: MoveRequestDTO = {
         matchId: match.matchId,
