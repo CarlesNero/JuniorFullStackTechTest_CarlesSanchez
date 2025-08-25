@@ -1,22 +1,19 @@
-import { Match, MatchStatusDTO } from "../interfaces/match";
+import { MatchStatusDTO } from "../interfaces/match";
 
 
 
 type Props = {
-  matches : MatchStatusDTO[]
+  matches: MatchStatusDTO[]
 }
 
 
-const ScoreTable = ({matches}: Props) => {
+const ScoreTable = ({ matches }: Props) => {
 
-
-
-
-    let victories = matches.filter(match => match.status === 'WIN_X').length;
-    let loses = matches.filter(match => match.status === 'WIN_O').length;
-    let ties = matches.filter(match => match.status === 'DRAW').length;
-    let unfinished = matches.filter(match => match.status === 'IN_PROGRESS').length;
-    let gamesPlayed = matches.length;
+  let victories = matches.filter(match => match.status === 'WIN_X').length;
+  let loses = matches.filter(match => match.status === 'WIN_O').length;
+  let ties = matches.filter(match => match.status === 'DRAW').length;
+  let unfinished = matches.filter(match => match.status === 'IN_PROGRESS').length;
+  let gamesPlayed = matches.length;
 
 
   return (

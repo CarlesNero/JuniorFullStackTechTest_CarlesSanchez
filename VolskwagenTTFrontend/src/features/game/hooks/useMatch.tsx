@@ -1,7 +1,7 @@
 // hooks/useMatch.ts
 import { useState, useEffect, useCallback } from "react";
-import { createMatch, getMatchStatus, makeMove, getAllUserMatches } from "../services/matchApi";
-import type { Match, MatchStatusDTO, MoveRequestDTO } from "../interfaces/match";
+import { getMatchStatus, getAllUserMatches, makeMove, createMatch } from "../services/matchApi";
+import type { MatchStatusDTO, MoveRequestDTO } from "../interfaces/match";
 
 
 export const useMatch = (playerId: number) => {
@@ -10,6 +10,11 @@ export const useMatch = (playerId: number) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [matches, setMatches] = useState<MatchStatusDTO[]>([]);
+
+
+
+
+  /* Use Effects */
 
   const getMatch = useCallback(async (matchId: number) => {
     try {
@@ -20,8 +25,6 @@ export const useMatch = (playerId: number) => {
       throw err;
     }
   }, []);
-
-
 
   const fetchLastMatch = useCallback(async () => {
     setIsLoading(true);
@@ -55,7 +58,27 @@ export const useMatch = (playerId: number) => {
   }, [match]);
 
 
-  const createNewMatch =  async () => {
+  useEffect(() => {
+    fetchLastMatch();
+  }, []);
+
+
+  const closeModal = useCallback(() => {
+    setShowModal(false);
+  }, []);
+
+  const clearError = useCallback(() => {
+    setError(null);
+  }, []);
+
+
+
+
+  /* Functions */
+
+
+
+  const createNewMatch = async () => {
     setIsLoading(true);
     setError(null);
 
@@ -75,7 +98,7 @@ export const useMatch = (playerId: number) => {
   };
 
 
-  const makeMoveOnClick = useCallback(async (x: number, y: number) => {
+  const makeMoveOnClick = async (x: number, y: number) => {
     if (!match) return;
 
     setIsLoading(true);
@@ -100,36 +123,24 @@ export const useMatch = (playerId: number) => {
     } finally {
       setIsLoading(false);
     }
-  }, [match, getMatch]);
+  };
 
   const endGame = (updatedMatch: MatchStatusDTO) => {
     setShowModal(true)
     setMatches(matches.map(_match => _match?.id === updatedMatch.id ? updatedMatch : _match))
   }
 
-  useEffect(() => {
-    fetchLastMatch();
-  }, []);
-
-
-  const closeModal = useCallback(() => {
-    setShowModal(false);
-  }, []);
-
-  const clearError = useCallback(() => {
-    setError(null);
-  }, []);
 
   return {
     match,
     showModal,
     isLoading,
     error,
-    createNewMatch,
-    makeMoveOnClick,
     fetchLastMatch,
     closeModal,
     clearError,
-    matches
+    matches,
+    makeMoveOnClick,
+    createNewMatch
   };
 };

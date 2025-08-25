@@ -1,6 +1,5 @@
 // components/board/Board.tsx
 import { useAuth } from "../../../auth/context/AuthContext";
-import { useMatch } from "../../hooks/useMatch";
 import ModalEndGame from "../modalEndGame";
 import Square from "./square/Square";
 import NewMatchBtn from "./newMatchBtn/NewMatchBtn";
@@ -16,8 +15,8 @@ type Props = {
   makeMoveOnClick: any
 }
 
-const Board = ({ match, matches, showModal, isLoading, error, createNewMatch, makeMoveOnClick }: Props) => {
-  const { player } = useAuth();
+const Board = ({ match, showModal, isLoading, error, createNewMatch, makeMoveOnClick }: Props) => {
+
 
 
 
