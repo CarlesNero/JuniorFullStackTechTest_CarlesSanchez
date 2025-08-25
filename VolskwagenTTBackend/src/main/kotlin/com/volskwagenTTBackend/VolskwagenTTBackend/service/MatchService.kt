@@ -3,7 +3,6 @@ package com.volskwagenTTBackend.VolskwagenTTBackend.service
 import com.volskwagenTTBackend.VolskwagenTTBackend.domain.dto.MoveRequestDTO
 import com.volskwagenTTBackend.VolskwagenTTBackend.domain.dto.MatchStatusDTO
 import com.volskwagenTTBackend.VolskwagenTTBackend.domain.dto.MoveResponseDTO
-import com.volskwagenTTBackend.VolskwagenTTBackend.domain.dto.SquareDTO
 import com.volskwagenTTBackend.VolskwagenTTBackend.domain.dto.SquareResponseDTO
 import com.volskwagenTTBackend.VolskwagenTTBackend.domain.entity.MatchEntity
 import com.volskwagenTTBackend.VolskwagenTTBackend.domain.entity.SquareEntity
@@ -12,6 +11,8 @@ import com.volskwagenTTBackend.VolskwagenTTBackend.repository.PlayerRepository
 import com.volskwagenTTBackend.VolskwagenTTBackend.repository.SquareRepository
 import org.springframework.stereotype.Service
 import java.util.function.Supplier
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 
 @Service
@@ -21,14 +22,20 @@ class MatchService(
     private val squareRepository: SquareRepository
 ) {
 
+    private val logger: Logger = LoggerFactory.getLogger(MatchService::class.java)
+
 
     // Function to create a new match with a 3x3 board
 
     fun createMatch(playerId: Long): MatchEntity {
 
         // Find the player by id, throw exception if not found
+        logger.info("Creating new match for playerId=$playerId")
         val player = playerRepository.findById(playerId)
-            .orElseThrow { RuntimeException("Player not found") }
+            .orElseThrow {
+                logger.error("Player with id=$playerId not found")
+                RuntimeException("Player not found")
+            }
 
         // Create the match with 'X' player turn
         val match = MatchEntity(
@@ -54,6 +61,7 @@ class MatchService(
         squareRepository.saveAll(squares) // Save all squares to the db
         match.squares.addAll(squares) // Add squares to the match
 
+        logger.info("Match created with id: ${match.id} and empty board")
         return match // Return the full match
     }
 
@@ -62,16 +70,23 @@ class MatchService(
     fun makeMove(moveRequest: MoveRequestDTO): MoveResponseDTO {
 
         // Find match by Id, throw exception if not found
+        logger.info("Player ${moveRequest.playerId} attempts move at (${moveRequest.square.x}, ${moveRequest.square.y}) in match ${moveRequest.matchId}")
+
         val match = matchRepository.findById(moveRequest.matchId)
-            .orElseThrow { RuntimeException("Match not found") }
+            .orElseThrow {
+                logger.error("Match with id=${moveRequest.matchId} not found")
+                RuntimeException("Match not found")
+            }
 
         // If the match is already finished, return current state with error
         if (match.status != "IN_PROGRESS") {
+            logger.warn("Move rejected: match ${match.id} already finished with status=${match.status}")
             return matchToDTO(match, "Match already finished!")
         }
 
         // If it's not player turn, return current state with error
         if (match.currentTurn != moveRequest.playerId) {
+            logger.warn("Move rejected: Not ${moveRequest.playerId}'s turn")
             return matchToDTO(match, "Not your turn!")
         }
 
@@ -82,6 +97,7 @@ class MatchService(
 
         // If find the current square, but it already has a value, return current state with error
         if (square.square_value != null) {
+            logger.warn("Move rejected: Invalid square (${moveRequest.square.x}, ${moveRequest.square.y})")
             return matchToDTO(match, "Square already occupied!")
         }
 
@@ -90,11 +106,14 @@ class MatchService(
 
         // Save the square to the db
         squareRepository.save(square)
+        logger.info("Move accepted: Player ${moveRequest.playerId} placed at (${square.x}, ${square.y})")
+
 
         // Check if the player has won with this move
         if (checkWinner(match, moveRequest.playerId)) {
             match.status = "WIN_${moveRequest.playerId}"
             matchRepository.save(match)
+            logger.info("Player ${moveRequest.playerId} wins the match ${match.id}")
             return matchToDTO(match)
         }
 
@@ -102,6 +121,7 @@ class MatchService(
         if (match.squares.all { it.square_value != null }) {
             match.status = "DRAW"
             matchRepository.save(match)
+            logger.info("Match ${match.id} ended in a draw")
             return matchToDTO(match)
         }
 
@@ -110,6 +130,7 @@ class MatchService(
 
         // If it's the machine turn, make a move calling the makeMachineMove function
         if (match.currentTurn == "O") {
+            logger.info("Machine's turn for match ${match.id}")
             makeMachineMove(match)
         }
 
@@ -126,16 +147,18 @@ class MatchService(
         val emptySquares = match.squares.filter { it.square_value == null }
 
         // If there is an empty square, pick one at random
-        if (emptySquares.isNotEmpty()) {
-            val randomSquare = emptySquares.random()
-            randomSquare.square_value = "O"
-            squareRepository.save(randomSquare)
+        val chosenSquare = pickMachineSquare(match)
+        chosenSquare?.let {
+            it.square_value = "O"
+            squareRepository.save(it)
+            logger.info("Machine placed 'O' at (${it.x}, ${it.y}) in match ${match.id}")
         }
 
         // Check if machine has won
         if (checkWinner(match, "O")) {
             match.status = "WIN_O"
             matchRepository.save(match)
+            logger.info("Machine wins match ${match.id}")
             return
         }
 
@@ -143,12 +166,14 @@ class MatchService(
         if (match.squares.all { it.square_value != null }) {
             match.status = "DRAW"
             matchRepository.save(match)
+            logger.info("Match ${match.id} ended in a draw")
             return
         }
 
         // Change the current turn to the player
         match.currentTurn = "X"
         matchRepository.save(match)
+        logger.info("Turn changed to player 'X' in match ${match.id}")
     }
 
 
@@ -161,15 +186,29 @@ class MatchService(
             board[square.x - 1][square.y - 1] = square.square_value
         }
 
+        logger.debug("Checking winner for player=$player in match=${match.id}")
+
         // Check rows and columns
         for (i in 0..2) {
-            if ((0..2).all { board[i][it] == player }) return true
-            if ((0..2).all { board[it][i] == player }) return true
+            if ((0..2).all { board[i][it] == player }) {
+                logger.info("Player $player wins by row $i in match=${match.id}")
+                return true
+            }
+            if ((0..2).all { board[it][i] == player }) {
+                logger.info("Player $player wins by column $i in match=${match.id}")
+                return true
+            }
         }
 
         // Check diagonals
-        if ((0..2).all { board[it][it] == player }) return true
-        if ((0..2).all { board[it][2 - it] == player }) return true
+        if ((0..2).all { board[it][it] == player }) {
+            logger.info("Player $player wins by main diagonal in match=${match.id}")
+            return true
+        }
+        if ((0..2).all { board[it][2 - it] == player }) {
+            logger.info("Player $player wins by secondary diagonal in match=${match.id}")
+            return true
+        }
 
         return false
 
@@ -178,9 +217,11 @@ class MatchService(
     // Function to return current match status
     fun getMatchStatus(matchId: Long): MatchStatusDTO {
 
-        val match: MatchEntity = matchRepository.findById(matchId)
-            .orElseThrow<java.lang.RuntimeException?>(Supplier { java.lang.RuntimeException("Match not found") })
-
+        val match = matchRepository.findById(matchId)
+            .orElseThrow {
+                logger.error("Match with id=$matchId not found")
+                RuntimeException("Match not found")
+            }
         return MatchStatusDTO(
             match.id,
             match.currentTurn,
@@ -222,4 +263,11 @@ class MatchService(
         return matchRepository.findByPlayerId(playerId)
 
     }
+
+    // Method to mock the square for the machine movement
+    open fun pickMachineSquare(match: MatchEntity): SquareEntity? {
+        val emptySquares = match.squares.filter { it.square_value == null }
+        return if (emptySquares.isNotEmpty()) emptySquares.random() else null
+    }
+
 }
