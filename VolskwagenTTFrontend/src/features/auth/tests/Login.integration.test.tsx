@@ -9,7 +9,6 @@ import LoginPage from "../components/Login";
 
 /* Mocks */
 
-
 vi.mock("react-toastify", () => ({
   toast: {
     error: vi.fn(),
