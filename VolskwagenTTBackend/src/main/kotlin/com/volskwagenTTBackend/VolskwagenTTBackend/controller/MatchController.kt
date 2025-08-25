@@ -3,10 +3,14 @@ package com.volskwagenTTBackend.VolskwagenTTBackend.controller
 import com.volskwagenTTBackend.VolskwagenTTBackend.domain.dto.MatchStatusDTO
 import com.volskwagenTTBackend.VolskwagenTTBackend.domain.dto.MoveRequestDTO
 import com.volskwagenTTBackend.VolskwagenTTBackend.domain.dto.MoveResponseDTO
+import com.volskwagenTTBackend.VolskwagenTTBackend.domain.dto.ResponseMatch
+import com.volskwagenTTBackend.VolskwagenTTBackend.domain.dto.ResponsePlayer
 import com.volskwagenTTBackend.VolskwagenTTBackend.domain.entity.MatchEntity
+import com.volskwagenTTBackend.VolskwagenTTBackend.domain.entity.SquareEntity
 import com.volskwagenTTBackend.VolskwagenTTBackend.service.MatchService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import kotlin.Long
 
 
 @RestController
@@ -62,9 +66,23 @@ class MatchController(private val matchService: MatchService) {
 
 
     @GetMapping("/player/{playerId}/matches")
-    fun getMatchesByPlayer(@PathVariable playerId: Long): ResponseEntity<List<MatchEntity>> {
+    fun getMatchesByPlayer(@PathVariable playerId: Long): ResponseEntity<List<ResponseMatch>> {
         val matches = matchService.getMatchesByPlayer(playerId)
-        return ResponseEntity.ok(matches)
+        val matchesDTO = matches.map { match ->
+            ResponseMatch(
+                id = match.id,
+                player = ResponsePlayer(
+                    id = match.player.id,
+                    username = match.player.username,
+                    email = match.player.email,
+                ),
+                currentTurn = match.currentTurn,
+                status = match.status,
+                squares = match.squares
+
+            )
+        }
+        return ResponseEntity.ok(matchesDTO)
     }
 
 }
