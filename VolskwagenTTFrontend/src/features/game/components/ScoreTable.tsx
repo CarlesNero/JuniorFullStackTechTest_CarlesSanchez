@@ -1,20 +1,21 @@
-import { Match } from "@testing-library/react";
-import { getAllUserMatches } from "../services/matchApi";
-import { useContext, useState } from "react";
-import { MatchContext } from "../context/matchContext";
+import { Match, MatchStatusDTO } from "../interfaces/match";
 
 
-type Props = {}
 
-const ScoreTable = (props: Props) => {
+type Props = {
+  matches : MatchStatusDTO[]
+}
 
-    const {matches, setMatches} = useContext(MatchContext)!;
+
+const ScoreTable = ({matches}: Props) => {
+
+
 
 
     let victories = matches.filter(match => match.status === 'WIN_X').length;
-    let loses = matches.filter(match => match.status === 'WIN_O').length;;
-    let ties = matches.filter(match => match.status === 'DRAW').length;;
-    let unfinished = matches.filter(match => match.status === 'IN_PROGRESS').length;;
+    let loses = matches.filter(match => match.status === 'WIN_O').length;
+    let ties = matches.filter(match => match.status === 'DRAW').length;
+    let unfinished = matches.filter(match => match.status === 'IN_PROGRESS').length;
     let gamesPlayed = matches.length;
 
 

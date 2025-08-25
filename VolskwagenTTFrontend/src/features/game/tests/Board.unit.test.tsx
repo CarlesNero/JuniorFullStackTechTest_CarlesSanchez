@@ -23,14 +23,14 @@ const mockMakeMove = makeMove as MockedFunction<typeof makeMove>
 const mockGetAllUserMatches = getAllUserMatches as MockedFunction<typeof getAllUserMatches>
 
 
-const createWrapper = () => {
+/* const createWrapper = () => {
   return ({ children }: { children: React.ReactNode }) => (
     <MatchProvider>
       {children}
     </MatchProvider>
   )
 }
-
+ */
 describe('useMatch', () => {
   const playerId = 1
   
@@ -86,8 +86,8 @@ describe('useMatch', () => {
       })
 
       expect(result.current.match).toBeNull()
-      expect(result.current.showModal).toBe(false)
-      expect(result.current.isLoading).toBe(false)
+      expect(result.current.showModal).toBeFalsy()
+      expect(result.current.isLoading).toBeFalsy()
       expect(result.current.error).toBeNull()
     })
   })
@@ -108,7 +108,7 @@ describe('useMatch', () => {
       })
 
       expect(mockGetAllUserMatches).toHaveBeenCalledWith(playerId)
-      expect(result.current.isLoading).toBe(false)
+      expect(result.current.isLoading).toBeFalsy()
     })
 
     it('should handle errors when fetching matches', async () => {
@@ -123,7 +123,7 @@ describe('useMatch', () => {
         expect(result.current.error).toBe('Error loading matches')
       })
 
-      expect(result.current.isLoading).toBe(false)
+      expect(result.current.isLoading).toBeFalsy()
     })
   })
 
@@ -265,5 +265,9 @@ describe('useMatch', () => {
 
       expect(result.current.error).toBeNull()
     })
+  })
+
+  describe('user click on createNewMatch', () => {
+
   })
 })

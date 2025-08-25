@@ -53,7 +53,7 @@ export const getMatchStatus = async (matchId: number): Promise<MatchStatusDTO> =
 
 }
 
-export const getAllUserMatches = async(playerId: number) : Promise<Match[]> => {
+export const getAllUserMatches = async(playerId: number) : Promise<MatchStatusDTO[]> => {
   const res = await fetch (`${BASE_URL}/player/${playerId}/matches`)
   return res.json()
 }

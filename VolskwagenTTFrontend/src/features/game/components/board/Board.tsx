@@ -4,23 +4,20 @@ import { useMatch } from "../../hooks/useMatch";
 import ModalEndGame from "../modalEndGame";
 import Square from "./square/Square";
 import NewMatchBtn from "./newMatchBtn/NewMatchBtn";
-import { MatchContext } from "../../context/matchContext";
-import { useContext } from "react";
+import { Match, MatchStatusDTO } from "../../interfaces/match";
 
-const Board = () => {
+type Props = {
+  matches: MatchStatusDTO[],
+  match: MatchStatusDTO,
+  showModal: any,
+  isLoading: any,
+  error: any,
+  createNewMatch: any,
+  makeMoveOnClick: any
+}
+
+const Board = ({ match, matches, showModal, isLoading, error, createNewMatch, makeMoveOnClick }: Props) => {
   const { player } = useAuth();
-  
-  const {
-    match,
-    showModal,
-    isLoading,
-    error,
-    createNewMatch,
-    makeMoveOnClick
-  } = useMatch(player.id);
-
- 
-
 
 
 
@@ -58,21 +55,21 @@ const Board = () => {
 
   return (
     <div className="bg-white rounded-md p-5 flex flex-col items-center gap-5 w-full m-auto">
-     
+
       {showModal && (
         <ModalEndGame status={match.status}>
           <NewMatchBtn onButtonClick={createNewMatch} />
         </ModalEndGame>
       )}
 
- 
+
       <h1 className="font-medium text-xl">
-        It's your turn player <span className="font-black">{match.playerTurn}</span>
+        It's your turn player <span className="font-black">{match.currentTurn}</span>
       </h1>
 
 
       <div className="grid grid-cols-3 w-full gap-3 p-5 rounded-md shadow-md">
-        {match.squares.map(square => (
+        {match.board.map(square => (
           <Square
             key={square.id || `${square.x}-${square.y}`}
             square={square}
