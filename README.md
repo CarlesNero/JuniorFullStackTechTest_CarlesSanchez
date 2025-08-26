@@ -41,8 +41,6 @@ It allows creating users, login, creating matches, making moves and checking the
 
 ### Backend
 
-### Backend
-
 1. Download the repository and open the backend project in an IDE (e.g., IntelliJ).  
 2. Run the application normally from the IDE.  
 3. The server will start on **port 8585** automatically.  
