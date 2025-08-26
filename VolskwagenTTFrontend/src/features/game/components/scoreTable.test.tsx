@@ -2,7 +2,7 @@ import { describe, expect, vi } from 'vitest'
 
 import '@testing-library/jest-dom'
 import { render, waitFor } from '@testing-library/react'
-import { Square, SquareValue } from '../interfaces/square'
+import { Square } from '../interfaces/square'
 import { MatchStatusDTO } from '../interfaces/match'
 import ScoreTable from './ScoreTable'
 
@@ -11,7 +11,7 @@ const mockSquares: Square[] = Array.from({ length: 9 }, (_, index) => ({
     id: index + 1,
     x: index % 3,
     y: Math.floor(index / 3),
-    square_value: null as SquareValue
+    square_value: null
 }))
 
 

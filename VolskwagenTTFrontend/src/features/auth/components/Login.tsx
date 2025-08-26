@@ -26,10 +26,10 @@ const LoginPage = () => {
       const response: Player | ApiError = await loginPlayer(loginData);
 
       if ("error" in response) {
-        toast.error(response.error); // Mostrar mensaje de error del backend
+        toast.error(response.error); 
       } else {
         toast.success("Login successful!");
-        loginUser(response); // Save payer on contexto and localStorage
+        loginUser(response); 
         navigate("/home");
       }
     } catch (err) {

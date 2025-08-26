@@ -23,13 +23,12 @@ const Register = ({ onSwitchToLogin }: Props) => {
         try {
             const response = await registerPlayer(newPlayer)
 
-            // Si response tiene un error (ApiError)
+            
             if (isApiError(response)) {
                 toast.error(response.error)
             } else {
                 toast.success("User registered successfully!")
                 onSwitchToLogin()
-                console.log("Registered user:", response)
                 setEmail("")
                 setUsername("")
                 setPassword("")

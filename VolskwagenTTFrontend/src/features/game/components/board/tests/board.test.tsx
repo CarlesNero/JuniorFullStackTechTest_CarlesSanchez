@@ -1,7 +1,7 @@
 import { describe, expect, vi } from 'vitest'
 
 import '@testing-library/jest-dom'
-import { Square, SquareValue } from '../../../interfaces/square'
+import { Square } from '../../../interfaces/square'
 import { MatchStatusDTO } from '../../../interfaces/match'
 import Board from '../Board'
 import { render, waitFor } from '@testing-library/react'
@@ -12,7 +12,7 @@ const mockSquares: Square[] = Array.from({ length: 9 }, (_, index) => ({
     id: index + 1,
     x: index % 3,
     y: Math.floor(index / 3),
-    square_value: null as SquareValue
+    square_value:  null
 }))
 
 const mockMatch: MatchStatusDTO = {
@@ -62,9 +62,9 @@ describe('boardTest', () => {
             <Board {...testProps} />
         )
 
-        const titleElemnt = await waitFor(() => getByText("You haven't started any game yet"))
+        const titleElement = await waitFor(() => getByText("You haven't started any game yet"))
 
-        expect(titleElemnt).toBeInTheDocument();
+        expect(titleElement).toBeInTheDocument();
     })
 
 
@@ -76,9 +76,9 @@ describe('boardTest', () => {
             <Board {...testProps} />
         )
 
-        const titleElemnt = await waitFor(() => getByText("It's your turn player"))
+        const titleElement = await waitFor(() => getByText("It's your turn player"))
 
-        expect(titleElemnt).toBeInTheDocument();
+        expect(titleElement).toBeInTheDocument();
     })
 
 
@@ -92,7 +92,7 @@ describe('boardTest', () => {
 
         userEvent.click(newGameButton)
         await waitFor(() => {
-            expect(props.createNewMatch).toHaveBeenCalled
+            expect(props.createNewMatch).toHaveBeenCalled()
         })
 
     })
@@ -105,7 +105,7 @@ describe('boardTest', () => {
         await userEvent.click(square)
 
         await waitFor(() => {
-            expect(props.makeMoveOnClick).toHaveBeenCalledWith(0,0)
+            expect(props.makeMoveOnClick).toHaveBeenCalledWith(0, 0)
         })
     })
 
