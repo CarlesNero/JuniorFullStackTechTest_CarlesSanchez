@@ -6,6 +6,7 @@ import { useMatch } from "../hooks/useMatch";
 
 
 const HomePage = () => {
+
   const { player } = useAuth();
 
   const {
@@ -17,17 +18,15 @@ const HomePage = () => {
     makeMoveOnClick
   } = useMatch(player.id);
 
-
   return (
     <div className="bg-gray-300">
       <Header />
       <main className="max-w-5xl m-auto p-5 flex md:flex-row flex-col gap-5">
-        <Board match={match!} showModal={showModal}  error={error!} createNewMatch={createNewMatch} makeMoveOnClick={makeMoveOnClick} />
-        <ScoreTable matches={matches}/>
+        <Board match={match!} showModal={showModal} error={error!} createNewMatch={createNewMatch} makeMoveOnClick={makeMoveOnClick} />
+        <ScoreTable matches={matches} />
       </main>
     </div>
   )
 }
-
 
 export default HomePage

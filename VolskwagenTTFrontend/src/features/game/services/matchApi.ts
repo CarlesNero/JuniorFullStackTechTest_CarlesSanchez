@@ -35,7 +35,6 @@ export const createMatch = async (playerId: number): Promise<createMatchResponse
     headers: {
       'Content-Type': 'application/json',
     }
-
   })
   return response.json();
 }
@@ -48,9 +47,7 @@ export const getMatchStatus = async (matchId: number): Promise<MatchStatusDTO> =
       'Content-Type': 'application/json',
     }
   });
-
   return response.json();
-
 }
 
 export const getAllUserMatches = async(playerId: number) : Promise<MatchStatusDTO[]> => {
