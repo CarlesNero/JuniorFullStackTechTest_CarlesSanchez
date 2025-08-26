@@ -1,15 +1,20 @@
 // hooks/useMatch.ts
-import { useState, useEffect, useCallback, useContext } from "react";
-import { createMatch, getMatchStatus, makeMove, getAllUserMatches } from "../services/matchApi";
+import { useState, useEffect, useCallback } from "react";
+import { getMatchStatus, getAllUserMatches, makeMove, createMatch } from "../services/matchApi";
 import type { MatchStatusDTO, MoveRequestDTO } from "../interfaces/match";
-import { MatchContext } from "../context/matchContext";
+
 
 export const useMatch = (playerId: number) => {
   const [match, setMatch] = useState<MatchStatusDTO | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { matches, setMatches } = useContext(MatchContext)!;
+  const [matches, setMatches] = useState<MatchStatusDTO[]>([]);
+
+
+
+
+  /* Use Effects */
 
   const getMatch = useCallback(async (matchId: number) => {
     try {
@@ -21,25 +26,21 @@ export const useMatch = (playerId: number) => {
     }
   }, []);
 
-
-
-
   const fetchLastMatch = useCallback(async () => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const data = await getAllUserMatches(playerId);
-      setMatches(data);
-
+      const data = await getAllUserMatches(playerId)
+      setMatches(data)
 
       if (data && data.length > 0) {
         const lastMatch = data[data.length - 1];
 
         const lastMatchDTO: MatchStatusDTO = {
-          matchId: lastMatch.id!,
-          playerTurn: lastMatch.currentTurn,
-          squares: lastMatch.squares,
+          id: lastMatch.id!,
+          currentTurn: lastMatch.currentTurn,
+          board: lastMatch.board,
           status: lastMatch.status,
         };
 
@@ -47,66 +48,19 @@ export const useMatch = (playerId: number) => {
       } else {
         setMatch(null);
       }
+
     } catch (error) {
       console.error("Error fetching matches:", error);
       setError("Error loading matches");
     } finally {
       setIsLoading(false);
     }
-  }, [playerId]);
+  }, [match]);
 
-
-  const createNewMatch = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const data = await createMatch(playerId);
-      const newMatch = await getMatch(data.matchId);
-      setMatch(newMatch);
-      const matchesData = await getAllUserMatches(playerId);
-      setMatches(matchesData);
-      setShowModal(false);
-      return data;
-    } catch (error) {
-      console.error("Error creating match:", error);
-      setError("Error creating new match");
-    } finally {
-      setIsLoading(false);
-    }
-  }, [playerId, getMatch]);
-
-
-  const makeMoveOnClick = useCallback(async (x: number, y: number) => {
-    if (!match) return;
-
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const moveRequestDTO: MoveRequestDTO = {
-        matchId: match.matchId,
-        playerId: "X",
-        square: { x, y }
-      };
-
-      await makeMove(moveRequestDTO);
-      const updatedMatch = await getMatch(match.matchId);
-      setMatch(updatedMatch);
-
-
-      setShowModal(updatedMatch.status !== "IN_PROGRESS");
-    } catch (err) {
-      console.error("Error making move:", err);
-      setError("Error making move");
-    } finally {
-      setIsLoading(false);
-    }
-  }, [match, getMatch]);
 
   useEffect(() => {
     fetchLastMatch();
-  }, [fetchLastMatch]);
+  }, []);
 
 
   const closeModal = useCallback(() => {
@@ -117,16 +71,76 @@ export const useMatch = (playerId: number) => {
     setError(null);
   }, []);
 
-  return {
 
+
+
+  /* Functions */
+
+
+
+  const createNewMatch = async () => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const data = await createMatch(playerId);
+      const newMatch = await getMatch(data.matchId);
+      setMatch(newMatch);
+      setShowModal(false);
+      setMatches([...matches, newMatch!])
+      return data;
+    } catch (error) {
+      console.error("Error creating match:", error);
+      setError("Error creating new match");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+
+  const makeMoveOnClick = async (x: number, y: number) => {
+    if (!match) return;
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const moveRequestDTO: MoveRequestDTO = {
+        matchId: match.id,
+        playerId: "X",
+        square: { x, y }
+      };
+
+      await makeMove(moveRequestDTO);
+      const updatedMatch = await getMatch(match.id);
+      setMatch(updatedMatch);
+
+      if (updatedMatch.status !== "IN_PROGRESS") endGame(updatedMatch)
+
+    } catch (err) {
+      console.error("Error making move:", err);
+      setError("Error making move");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const endGame = (updatedMatch: MatchStatusDTO) => {
+    setShowModal(true)
+    setMatches(matches.map(_match => _match?.id === updatedMatch.id ? updatedMatch : _match))
+  }
+
+
+  return {
     match,
     showModal,
     isLoading,
     error,
-    createNewMatch,
-    makeMoveOnClick,
     fetchLastMatch,
     closeModal,
-    clearError
+    clearError,
+    matches,
+    makeMoveOnClick,
+    createNewMatch
   };
 };
