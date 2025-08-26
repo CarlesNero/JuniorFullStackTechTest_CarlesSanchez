@@ -27,7 +27,7 @@ data class MatchEntity(
 
     @OneToMany(mappedBy = "match", cascade = [CascadeType.ALL], orphanRemoval = true)
     @JsonManagedReference
-    var squares: MutableList<SquareEntity> = mutableListOf(),
+    var board: MutableList<SquareEntity> = mutableListOf(),
 
     @Column(nullable = false)
     var currentTurn: String = "X",

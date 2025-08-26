@@ -3,8 +3,8 @@ package com.volskwagenTTBackend.VolskwagenTTBackend.domain.dto
 import com.volskwagenTTBackend.VolskwagenTTBackend.domain.entity.SquareEntity
 
 data class MatchStatusDTO(
-    val matchId: Long?,
-    val playerTurn: String,
+    val id: Long?,
+    val currentTurn: String,
     val status: String,
-    val squares: List<SquareEntity>
+    val board: List<SquareEntity>
 )

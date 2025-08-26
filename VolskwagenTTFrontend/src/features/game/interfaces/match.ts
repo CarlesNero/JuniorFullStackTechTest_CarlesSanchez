@@ -4,16 +4,16 @@ import type { Square, SquareDTO, SquareResponseDTO } from "./square"
 export interface Match {
     id?: number,
     player: Player,
-    squares: Square[],
+    board: Square[],
     currentTurn: string,
     status: string
 }
 
 export interface MatchStatusDTO {
-    matchId: number,
-    playerTurn: string,
+    id: number,
+    currentTurn: string,
     status: string,
-    squares: Square[]
+    board: Square[]
 }
 
 export interface MoveRequestDTO {
@@ -24,7 +24,7 @@ export interface MoveRequestDTO {
 
 
 export interface MoveResponsetDTO {
-    matchId: number,
+    id: number,
     board: SquareResponseDTO[],
     currentTurn: string,
     status: string,

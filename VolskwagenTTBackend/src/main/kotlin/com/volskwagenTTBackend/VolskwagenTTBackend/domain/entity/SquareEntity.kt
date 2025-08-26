@@ -25,4 +25,5 @@ data class SquareEntity(
     @JoinColumn(name = "match")
     @JsonBackReference
     var match: MatchEntity? = null
+
 )

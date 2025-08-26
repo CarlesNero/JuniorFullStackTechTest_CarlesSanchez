@@ -9,7 +9,7 @@ data class ResponseMatch(
 
     val player: ResponsePlayer,
 
-    val squares: MutableList<SquareEntity> = mutableListOf(),
+    val board: MutableList<SquareEntity> = mutableListOf(),
 
     val currentTurn: String,
 

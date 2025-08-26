@@ -31,7 +31,6 @@ const getEndGameIcon = (status: string) => {
 }
 
 
-
 const modalEndGame = (props: Props) => {
     const color = getEndGameColor(props.status)
     return (
