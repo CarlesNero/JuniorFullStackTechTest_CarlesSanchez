@@ -68,7 +68,7 @@ class MatchService(
     // Function to make a move in the match
     @Transactional
     fun makeMove(moveRequestDTO: MoveRequestDTO): MoveResponseDTO {
-        val match = matchRepository.findById(moveRequestDTO.id)
+        val match = matchRepository.findById(moveRequestDTO.matchId)
             .orElseThrow { RuntimeException("Match not found") }
 
         if (match.status != "IN_PROGRESS") {
