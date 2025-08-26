@@ -122,7 +122,7 @@ npm run test
 
 - Entities include User, Match, and Square.
 
--Square entity represents each cell on the Tic-Tac-Toe board and allows storing the current value (X, O, or null) to **enable resuming matches mid-game**.
+- Square entity represents each cell on the Tic-Tac-Toe board and allows storing the current value (X, O, or null) to **enable resuming matches mid-game**.
 
 - Relationships: a User can have multiple Matches; a Match contains multiple Squares.
 
