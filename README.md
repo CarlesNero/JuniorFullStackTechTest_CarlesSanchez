@@ -66,8 +66,9 @@ npm run dev
 - IDE: IntelliJ, Eclipse, or similar
 
 ### Frontend
-- **Node.js 18+**
-- **npm 9+**
+- **Node.js v22.13.0**
+- **npm 10.9.2**
+- React 19**
 - Modern browser (Chrome, Firefox, Edge)
 
 ### 🧪 Tests
@@ -121,7 +122,7 @@ npm run test
 
 - Entities include User, Match, and Square.
 
-- Square entity represents each cell on the Tic-Tac-Toe board and allows storing the current value (X, O, or null) to enable resuming matches mid-game.
+-Square entity represents each cell on the Tic-Tac-Toe board and allows storing the current value (X, O, or null) to **enable resuming matches mid-game**.
 
 - Relationships: a User can have multiple Matches; a Match contains multiple Squares.
 
