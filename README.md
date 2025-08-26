@@ -41,8 +41,6 @@ It allows creating users, login, creating matches, making moves and checking the
 
 ### Backend
 
-### Backend
-
 1. Download the repository and open the backend project in an IDE (e.g., IntelliJ).  
 2. Run the application normally from the IDE.  
 3. The server will start on **port 8585** automatically.  
@@ -77,16 +75,13 @@ npm run dev
 
 #### Backend
 
-- **Frameworks** : JUnit and Mockito
+- Frameworks : JUnit and Mockito
 
 ```bash
 mvn test
 ````
 
 #### Frontend
-
-
-- **Frameworks** : Vitest
 
 ```bash
 npm run test
@@ -126,6 +121,8 @@ npm run test
 
 - Entities include User, Match, and Square.
 
+- Square entity represents each cell on the Tic-Tac-Toe board and allows storing the current value (X, O, or null) to enable resuming matches mid-game.
+
 - Relationships: a User can have multiple Matches; a Match contains multiple Squares.
 
 ### Frontend Design:
@@ -146,7 +143,7 @@ npm run test
 
 - Endpoints: PUT /users/{id}, DELETE /users/{id}.
 
-- Possibility of recovering unfinished matches to finish them
+- Possibility of recovering unfinished matches to finish them, enabled by the Square entity, which persists the state of each board cell.
 
 ### Game Enhancements:
 
@@ -267,4 +264,3 @@ Response:
     "email": "admin@gmail.com"
 }
 ````
-
