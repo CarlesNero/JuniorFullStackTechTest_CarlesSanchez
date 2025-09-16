@@ -6,7 +6,7 @@
     "COPY ./VolskwagenTTBackend/pom.xml ./",
     "RUN mvn dependency:go-offline -B",
     "COPY ./VolskwagenTTBackend ./",
-    "RUN mvn clean package -DskipTests",
+    "RUN mvn clean install -Dmaven.test.skip=true",
 
     "FROM eclipse-temurin:17-jdk-alpine",
     "WORKDIR /app",
