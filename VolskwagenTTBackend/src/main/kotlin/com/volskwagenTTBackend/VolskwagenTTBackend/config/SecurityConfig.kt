@@ -31,16 +31,25 @@ class SecurityConfig {
         return http.build()
     }
 
-    @Bean
-    fun corsFilter(): CorsFilter {
-        val source = UrlBasedCorsConfigurationSource()
-        val config = CorsConfiguration()
-        config.allowCredentials = true
-        config.addAllowedOrigin("**.csanchezm.es")
-        config.addAllowedHeader("*")
-        config.addAllowedMethod("*")
-        source.registerCorsConfiguration("/**", config)
-        return CorsFilter(source)
-    }
+@Bean
+fun corsFilter(): CorsFilter {
+    val source = UrlBasedCorsConfigurationSource()
+    val config = CorsConfiguration()
+    config.allowCredentials = true
+    config.addAllowedHeader("*")
+    config.addAllowedMethod("*")
+
+    // HTTPS con múltiples subdominios
+    config.addAllowedOriginPattern("https://**.csanchezm.es")
+    config.addAllowedOriginPattern("https://csanchezm.es")
+
+    // HTTP con múltiples subdominios
+    config.addAllowedOriginPattern("http://**.csanchezm.es")
+    config.addAllowedOriginPattern("http://csanchezm.es")
+
+    source.registerCorsConfiguration("/**", config)
+    return CorsFilter(source)
+}
+
 
 }
