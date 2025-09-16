@@ -1,6 +1,6 @@
 import type { ApiError, LoginPlayerDTO, Player } from "../interfaces/player"
 
-const BASE_URL = 'http://localhost:8585/api/player'
+const BASE_URL = 'https://tictactoe-back.captain.csanchezm.es/api/player'
 
 /* Register a new player */
 

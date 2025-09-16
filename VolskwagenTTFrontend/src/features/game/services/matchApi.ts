@@ -1,7 +1,7 @@
 import type { createMatchResponse, Match, MatchStatusDTO, MoveRequestDTO, MoveResponsetDTO } from "../interfaces/match"
 
 
-const BASE_URL = 'http://localhost:8585/api/match'
+const BASE_URL = 'https://tictactoe-back.captain.csanchezm.es/api/match'
 
 export const getAllMatches = async (): Promise<Match[]> => {
   const res = await fetch(`${BASE_URL}`)
