@@ -10,7 +10,7 @@ const Header = () => {
         <div className="flex gap-4 items-center">
           <img
             className="w-10 aspect-square "
-            src="./src/assets/tic-tac-toe-game.svg"
+            src="./tic-tac-toe-game.svg"
             alt=""
           />
           <h1 className="text-4xl font-black">Tic Tac Toe </h1>
