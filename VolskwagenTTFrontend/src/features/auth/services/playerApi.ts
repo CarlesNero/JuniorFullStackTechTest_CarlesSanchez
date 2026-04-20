@@ -1,10 +1,12 @@
-import type { ApiError, LoginPlayerDTO, Player } from "../interfaces/player"
+import type { ApiError, LoginPlayerDTO, Player } from "../interfaces/player";
 
-const BASE_URL = 'https://tictactoe-back.captain.csanchezm.es/api/player'
+const BASE_URL = "https://tictactoe-back.csanchezm.es/api/player";
 
 /* Register a new player */
 
-export const registerPlayer = async (player: Player): Promise<Player | ApiError> => {
+export const registerPlayer = async (
+  player: Player,
+): Promise<Player | ApiError> => {
   const res = await fetch(`${BASE_URL}/register`, {
     method: "POST",
     headers: {
@@ -21,10 +23,11 @@ export const registerPlayer = async (player: Player): Promise<Player | ApiError>
   return res.json();
 };
 
-
 /*   Login a player */
 
-export const loginPlayer = async (loginData: LoginPlayerDTO): Promise<Player | ApiError> => {
+export const loginPlayer = async (
+  loginData: LoginPlayerDTO,
+): Promise<Player | ApiError> => {
   const res = await fetch(`${BASE_URL}/login`, {
     method: "POST",
     headers: {
@@ -41,20 +44,18 @@ export const loginPlayer = async (loginData: LoginPlayerDTO): Promise<Player | A
   return res.json();
 };
 
-
 /* Get a player by id */
 
 export const getPlayer = async (playerId: number): Promise<Player> => {
-    const res = await fetch(`${BASE_URL}/${playerId}`)
-    return res.json()
-}
+  const res = await fetch(`${BASE_URL}/${playerId}`);
+  return res.json();
+};
 
 /* Get all players */
 
-export const getAllPlayers = async() : Promise<Player[]> =>{
-    const res = await fetch(`${BASE_URL}`)
-    return res.json()
-}
+export const getAllPlayers = async (): Promise<Player[]> => {
+  const res = await fetch(`${BASE_URL}`);
+  return res.json();
+};
 
 /* Get all user matches */
-
