@@ -1,25 +1,32 @@
-import type { createMatchResponse, Match, MatchStatusDTO, MoveRequestDTO, MoveResponsetDTO } from "../interfaces/match"
+import type {
+  createMatchResponse,
+  Match,
+  MatchStatusDTO,
+  MoveRequestDTO,
+  MoveResponsetDTO,
+} from "../interfaces/match";
 
-
-const BASE_URL = 'https://tictactoe-back.captain.csanchezm.es/api/match'
+const BASE_URL = "https://tictactoe-back.csanchezm.es/api/match";
 
 export const getAllMatches = async (): Promise<Match[]> => {
-  const res = await fetch(`${BASE_URL}`)
-  return res.json()
-}
+  const res = await fetch(`${BASE_URL}`);
+  return res.json();
+};
 
 export const getMatch = async (matchId: number): Promise<Match> => {
-  const res = await fetch(`${BASE_URL}/${matchId}`)
-  return res.json()
-}
+  const res = await fetch(`${BASE_URL}/${matchId}`);
+  return res.json();
+};
 
-export const makeMove = async (moveRequest: MoveRequestDTO): Promise<MoveResponsetDTO> => {
+export const makeMove = async (
+  moveRequest: MoveRequestDTO,
+): Promise<MoveResponsetDTO> => {
   const response = await fetch(`${BASE_URL}/move`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(moveRequest)
+    body: JSON.stringify(moveRequest),
   });
 
   if (!response.ok) {
@@ -29,28 +36,33 @@ export const makeMove = async (moveRequest: MoveRequestDTO): Promise<MoveRespons
   return response.json();
 };
 
-export const createMatch = async (playerId: number): Promise<createMatchResponse> => {
+export const createMatch = async (
+  playerId: number,
+): Promise<createMatchResponse> => {
   const response = await fetch(`${BASE_URL}/create?playerId=${playerId}`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
-    }
-  })
-  return response.json();
-}
-
-
-export const getMatchStatus = async (matchId: number): Promise<MatchStatusDTO> => {
-  const response = await fetch(`${BASE_URL}/status?matchId=${matchId}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    }
+      "Content-Type": "application/json",
+    },
   });
   return response.json();
-}
+};
 
-export const getAllUserMatches = async(playerId: number) : Promise<MatchStatusDTO[]> => {
-  const res = await fetch (`${BASE_URL}/player/${playerId}/matches`)
-  return res.json()
-}
+export const getMatchStatus = async (
+  matchId: number,
+): Promise<MatchStatusDTO> => {
+  const response = await fetch(`${BASE_URL}/status?matchId=${matchId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  return response.json();
+};
+
+export const getAllUserMatches = async (
+  playerId: number,
+): Promise<MatchStatusDTO[]> => {
+  const res = await fetch(`${BASE_URL}/player/${playerId}/matches`);
+  return res.json();
+};
